@@ -7,6 +7,9 @@ WORKDIR /app
 COPY . .
 RUN mvn clean install -DskipTests
 RUN mvn clean package
-COPY /target/*.jar app.jar
+RUN cd ..
+RUN chmod -R 777 /app
+RUN cd /app
+COPY /target/RestApiProject-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
