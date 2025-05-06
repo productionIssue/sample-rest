@@ -15,4 +15,8 @@ public class MasterController {
         MasterModel masterModel = new MasterModel(param);
         return ResponseEntity.ok(masterModel);
     }
+
+    public String getLove() {
+        return "I LOVE YOU MY DIPU DARLING <3";
+    }
 }
