@@ -16,6 +16,7 @@ public class MasterController {
         return ResponseEntity.ok(masterModel);
     }
 
+    @GetMapping("/send-love")
     public String getLove() {
         return "I LOVE YOU MY DIPU DARLING <3";
     }
