@@ -10,6 +10,6 @@ RUN mvn clean package
 RUN cd ..
 RUN chmod -R 777 /app
 RUN cd /app
-COPY /target/RestApiProject-0.0.1-SNAPSHOT.jar app.jar
+COPY app/target/RestApiProject-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
