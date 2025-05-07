@@ -1,23 +1,44 @@
 package com.example.RestApiProject.controller;
 
-import com.example.RestApiProject.model.MasterModel;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.RestApiProject.model.MongoDbEmployeeModel;
+import com.example.RestApiProject.repository.MongoRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api/v1/db")
 public class MasterController {
-    @GetMapping("/connection/{param}")
-    public ResponseEntity<MasterModel> getConnection(@PathVariable String param) {
-        MasterModel masterModel = new MasterModel(param);
-        return ResponseEntity.ok(masterModel);
+    @Autowired
+    private MongoRepo mongoRepo;
+
+    @GetMapping("fetch-employee")
+    public List<MongoDbEmployeeModel> getAllEmployees() {
+        return mongoRepo.findAll();
     }
 
-    @GetMapping("/send-love")
-    public String getLove() {
-        return "I LOVE YOU MY DIPU DARLING <3";
+    @GetMapping("get-employee-by-id/{id}")
+    public Optional<MongoDbEmployeeModel> getUserById(@PathVariable String id) {
+        return mongoRepo.findById(id);
+    }
+
+    @PostMapping("add-employee")
+    public MongoDbEmployeeModel assNewEmployee(@RequestBody MongoDbEmployeeModel mongoDbEmployeeModel) {
+        return mongoRepo.save(mongoDbEmployeeModel);
+    }
+
+    @PutMapping("update-employee/{id}")
+    public MongoDbEmployeeModel updateUser(@PathVariable String id, @RequestBody MongoDbEmployeeModel mongoDbEmployeeModel) {
+        MongoDbEmployeeModel fetchedMongoDbEmployeeModel = mongoRepo.findById(id).orElseThrow();
+        fetchedMongoDbEmployeeModel.setName(mongoDbEmployeeModel.getName());
+        fetchedMongoDbEmployeeModel.setCompany(mongoDbEmployeeModel.getCompany());
+        return mongoRepo.save(fetchedMongoDbEmployeeModel);
+    }
+
+    @DeleteMapping("delete-employee/{id}")
+    public void deleteUser(@PathVariable String id) {
+        mongoRepo.deleteById(id);
     }
 }
